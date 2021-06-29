@@ -1,21 +1,50 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import StartScreen from "./src/screens/StartScreen";
+import HomeScreen from "./src/screens/HomeScreen";
+import CommonScreen from "./src/screens/CommonScreen";
 
-export default function App() {
+const Stack = createStackNavigator();
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Start"
+          component={StartScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            title: "Get Your Nearby Services",
+            headerTitleAlign: "center",
+            headerTintColor: "#4A4A4A",
+            headerTitleStyle: {
+              fontSize: 18,
+              fontWeight: "500",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Common"
+          component={CommonScreen}
+          options={({ route }) => ({
+            title: route.params.name,
+            headerTitleAlign: "center",
+            headerTintColor: "#4A4A4A",
+            headerTitleStyle: {
+              fontSize: 18,
+              fontWeight: "500",
+            },
+          })}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
