@@ -19,9 +19,9 @@ const makeGoodData = (results) => {
     return {
       name: item.name,
       place_id: item.place_id,
-      photoRef: item.photos[0].photo_reference,
-      latitude: results.geometry.location.lat,
-      longitude: results.geometry.location.long,
+      // photoRef: item.photos[0].photo_reference,
+      latitude: item.geometry.location.lat,
+      longitude: item.geometry.location.lng,
     };
   });
   //return nearest 7 dests
@@ -76,7 +76,7 @@ export const findDistance = async (origin_lat, origin_long, dest_placeId) => {
     console.log(url);
     const response = await fetch(url);
     const json_data = await response.json();
-    const distance = rows.elements.distance.text;
+    const distance = json_data.rows[0].elements[0].distance.text;
     return distance;
   } catch (e) {
     return { msg: e.message, customError: true };

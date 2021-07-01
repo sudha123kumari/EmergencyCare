@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import DetailCard from "../components/DetailCard";
 import Footer from "../components/Footer";
+import { searchNearbyPlaces, placeDetails, findDistance } from "../../api";
 const Detail = [
   {
     id: 1,
@@ -56,8 +57,44 @@ const Detail = [
 ];
 export default class CommonScreen extends React.Component {
   state = {
-    latitude : this.props.route.params.latitude,
-    longitude : this.props.route.params.longitude,
+    latitude: this.props.route.params.latitude,
+    longitude: this.props.route.params.longitude,
+    nearbyPlaces: [],
+    nearbyPlaceDetails: [],
+    placeDistance: [],
+  };
+
+  getPlaceDetails = async () => {
+    for (const place of this.state.nearbyPlaces) {
+      const data = await placeDetails(place.place_id);
+      this.setState({
+        nearbyPlaceDetails: [...this.state.nearbyPlaceDetails, data],
+      });
+    }
+  };
+
+  getPlaceDistance = async () => {
+    for (const place of this.state.nearbyPlaces) {
+      const data = await findDistance(
+        this.state.latitude,
+        this.state.longitude,
+        place.place_id
+      );
+      this.setState({
+        placeDistance: [...this.state.placeDistance, data],
+      });
+    }
+    console.log(this.state.placeDistance);
+  };
+
+  async componentDidMount() {
+    const response = await searchNearbyPlaces(
+      this.state.latitude,
+      this.state.longitude,
+      "hospital"
+    );
+    this.setState({ nearbyPlaces: [...response] });
+    this.getPlaceDistance();
   }
   render() {
     return (
