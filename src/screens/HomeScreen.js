@@ -18,8 +18,10 @@ export default class HomeScreen extends React.Component {
       this.props.navigation.navigate("Start");
     } else {
       try {
+        this.setState({ visible: true });
         let locationData = await Location.getCurrentPositionAsync({});
         this.setState({ location: locationData });
+        this.setState({ visible: false });
 
         if (this.state.location) {
           console.log(this.state.location);
@@ -34,7 +36,6 @@ export default class HomeScreen extends React.Component {
   };
 
   async componentDidMount() {
-    this.setState({ visible: true });
     await this.getLocationPermission();
   }
 

@@ -55,11 +55,27 @@ export default DetailCard = ({
             borderRadius: 14,
           }}
         >
-          <ImageBackground
-            resizeMode={"contain"}
-            style={{ height: 50, width: 50 }}
-            source={{ uri: `${icon}` }}
-          />
+          {icon === "hospital" && (
+            <ImageBackground
+              resizeMode={"contain"}
+              style={{ height: 50, width: 50 }}
+              source={require("../../assets/images/hospitalicon.png")}
+            />
+          )}
+          {icon === "police" && (
+            <ImageBackground
+              resizeMode={"contain"}
+              style={{ height: 50, width: 50 }}
+              source={require("../../assets/images/policeicon.png")}
+            />
+          )}
+          {icon === "fire_station" && (
+            <ImageBackground
+              resizeMode={"contain"}
+              style={{ height: 50, width: 50 }}
+              source={require("../../assets/images/fireicon.png")}
+            />
+          )}
         </View>
       )}
       <View
