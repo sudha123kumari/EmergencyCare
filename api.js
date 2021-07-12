@@ -2,12 +2,22 @@ import CONF_API_KEY from "./config";
 
 // Place Search API call
 export const searchNearbyPlaces = async (lat, long, query) => {
+  let keywordString = "";
+  switch (query) {
+    case "hospital":
+      keywordString = "";
+    case "police":
+      keywordString = "keyword=police|thana";
+    case "fire_station":
+      keywordString = "keyword=fire";
+  }
   try {
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&rankby=distance&type=${query}&key=${CONF_API_KEY}`;
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&rankby=distance&type=${query}&key=${CONF_API_KEY}&${keywordString}`;
     console.log(url);
 
     const response = await fetch(url);
     const json = await response.json();
+
     return makeGoodData(json.results);
   } catch (e) {
     return { msg: e.message, customError: true };
@@ -19,6 +29,8 @@ const makeGoodData = (results) => {
     return {
       name: item.name,
       place_id: item.place_id,
+      icon: item.icon,
+
       // photoRef: item.photos[0].photo_reference,
       latitude: item.geometry.location.lat,
       longitude: item.geometry.location.lng,
@@ -26,6 +38,9 @@ const makeGoodData = (results) => {
   });
   //return nearest 7 dests
   realResults = realResults.slice(0, 8);
+
+  // console.log("hospital from api.js");
+  // console.log(realResults);
   return realResults;
 };
 
@@ -36,6 +51,8 @@ export const placeDetails = async (placeId) => {
     console.log(url);
     const response = await fetch(url);
     const json = await response.json();
+    // // console.log(json.photos);
+    // console.log(json.result);
     return makeGoodPlaceData(json.result);
   } catch (e) {
     return { msg: e.message, customError: true };

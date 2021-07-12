@@ -59,6 +59,7 @@ export default class HomeScreen extends React.Component {
                 onClick={() =>
                   this.props.navigation.navigate("Common", {
                     name: "Hospitals",
+                    type: "hospital",
                     latitude: this.state.location.coords.latitude,
                     longitude: this.state.location.coords.longitude,
                   })
@@ -71,6 +72,7 @@ export default class HomeScreen extends React.Component {
                 onClick={() =>
                   this.props.navigation.navigate("Common", {
                     name: "Fire Stations",
+                    type: "fire_station",
                     latitude: this.state.location.coords.latitude,
                     longitude: this.state.location.coords.longitude,
                   })
@@ -85,6 +87,7 @@ export default class HomeScreen extends React.Component {
                 onClick={() =>
                   this.props.navigation.navigate("Common", {
                     name: "Police Stations",
+                    type: "police",
                     latitude: this.state.location.coords.latitude,
                     longitude: this.state.location.coords.longitude,
                   })
