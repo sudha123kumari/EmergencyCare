@@ -11,6 +11,7 @@ import {
 import DetailCard from "../components/DetailCard";
 import Footer from "../components/Footer";
 import { searchNearbyPlaces, placeDetails, findDistance } from "../../api";
+import AnimatedLoader from "../components/AnimatedLoader";
 
 export default class CommonScreen extends React.Component {
   state = {
@@ -21,60 +22,43 @@ export default class CommonScreen extends React.Component {
     nearbyPlaceDetails: [],
     placeDistance: [],
     flag: false,
+    loader: false,
   };
 
-  // getPlaceDetails = async () => {
-  //   for (const place of this.state.nearbyPlaces) {
-  //     const data = await placeDetails(place.place_id);
-  //     this.setState({
-  //       nearbyPlaceDetails: [...this.state.nearbyPlaceDetails, data],
-  //     });
-  //   }
-  // };
-
-  // getPlaceDistance = async () => {
-  //   for (const place of this.state.nearbyPlaces) {
-  //     const data = await findDistance(
-  //       this.state.latitude,
-  //       this.state.longitude,
-  //       place.place_id
-  //     );
-  //     this.setState({
-  //       placeDistance: [...this.state.placeDistance, data],
-  //     });
-  //   }
-  // };
+  colorList = [
+    { id: 1, backgroundColor: "#B7FFD4" },
+    { id: 2, backgroundColor: "#7ED5FA" },
+    { id: 3, backgroundColor: "#BEFFFB" },
+    { id: 4, backgroundColor: "#FFF599" },
+    { id: 5, backgroundColor: "#FFCEF1" },
+    { id: 6, backgroundColor: "#EFFEFA" },
+    { id: 7, backgroundColor: "#BBBEFF" },
+    { id: 8, backgroundColor: "#EEEFFF" },
+    { id: 9, backgroundColor: "#B6D5FF" },
+    { id: 10, backgroundColor: "#FFF599" },
+  ];
 
   async componentDidMount() {
+    this.setState({ loader: true });
     const response = await searchNearbyPlaces(
       this.state.latitude,
       this.state.longitude,
       this.state.type
     );
-    var data = [...response];
+    let data = [...response];
     this.setState({ nearbyPlaces: [...data] });
-    // console.log(
-    //   "++++++++________________________+++++++++++++++++++++++++++++++++++++++"
-    // );
-    // console.log(data);
-    // console.log("+++++++++++++++++++++++++++++++++++++++++++++++");
-    // console.log("places from common screen.js");
-    // console.log(response);
-    var pData = [];
+
+    let pData = [];
     await Promise.all(
       response.map(async (item) => {
         const res = await placeDetails(item.place_id);
-        // console.log("place details from common screen.js");
-        // console.log(res);
         pData.push(res);
       })
     );
-    // console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-    // console.log(pData);
-    // console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+
     this.setState({ nearbyPlaceDetails: [...pData] });
 
-    var pDistance = [];
+    let pDistance = [];
     await Promise.all(
       response.map(async (item) => {
         const dis = await findDistance(
@@ -82,31 +66,20 @@ export default class CommonScreen extends React.Component {
           this.state.longitude,
           item.place_id
         );
-        // console.log("distance in common screen .js");
-        // console.log(dis);
         pDistance.push(dis);
       })
     );
     this.setState({ placeDistance: [...pDistance] });
-
-    // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-    // console.log(pDistance);
-    // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-
-    // console.log(this.state.nearbyPlaces);
-    // console.log(this.state.nearbyPlaceDetails);
-    // console.log(this.state.placeDistance);
-    this.setState({ flag: true });
+    this.setState({ loader: false, flag: true });
   }
 
-  RenderItem = (item) => {
-    // console.log(this.state.nearbyPlaces.length);
+  renderItem = (item) => {
     if (item.index >= this.state.nearbyPlaces.length) {
       return;
     } else {
       return (
         <DetailCard
-          icon={this.state.nearbyPlaces[item.index].icon}
+          icon={this.state.type}
           backgroundColor={item.item.backgroundColor}
           name={this.state.nearbyPlaceDetails[item.index].name}
           details={this.state.nearbyPlaceDetails[item.index]}
@@ -119,34 +92,18 @@ export default class CommonScreen extends React.Component {
     return (
       <React.Fragment>
         <SafeAreaView style={{ flex: 1 }}>
-          <View style={{ flex: 6.1, backgroundColor: "#FFFFFF" }}>
-            {/* <ScrollView style={{ flex: 1, padding: 12 }}>
-              <Text>{this.state.latitude}</Text>
-              <Text>{this.state.longitude}</Text>
-            </ScrollView> */}
+          <View style={{ flex: 9, backgroundColor: "#FFFFFF"}}>
+            <AnimatedLoader visible={this.state.loader} />
             {this.state.flag && (
               <FlatList
-                data={[
-                  { key: 1, backgroundColor: "#B7FFD4" },
-                  { key: 2, backgroundColor: "#7ED5FA" },
-                  { key: 3, backgroundColor: "#BEFFFB" },
-                  { key: 4, backgroundColor: "#FFF599" },
-                  { key: 5, backgroundColor: "#FFCEF1" },
-                  { key: 6, backgroundColor: "#EFFEFA" },
-                  { key: 7, backgroundColor: "#BBBEFF" },
-                  { key: 8, backgroundColor: "#EEEFFF" },
-                  { key: 9, backgroundColor: "#B6D5FF" },
-                  { key: 10, backgroundColor: "#FFF599" },
-                ]}
-                renderItem={(item) => this.RenderItem(item)}
-                // keyExtractor={()) => item.id.toString()}
+                data={this.colorList}
+                renderItem={this.renderItem}
+                keyExtractor={(item) => item.id.toString()}
                 style={{ flex: 1, padding: 12 }}
               />
             )}
           </View>
-          <View style={{ flex: 1 }}>
-            <Footer />
-          </View>
+          <Footer />
         </SafeAreaView>
       </React.Fragment>
     );

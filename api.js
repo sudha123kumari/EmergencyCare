@@ -5,11 +5,16 @@ export const searchNearbyPlaces = async (lat, long, query) => {
   let keywordString = "";
   switch (query) {
     case "hospital":
-      keywordString = "";
+      keywordString = "hospital|emergency|medical|trauma|aiims";
+      break;
     case "police":
       keywordString = "keyword=police|thana";
+      break;
     case "fire_station":
       keywordString = "keyword=fire";
+      break;
+    default:
+      keywordString = "";
   }
   try {
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&rankby=distance&type=${query}&key=${CONF_API_KEY}&${keywordString}`;
@@ -30,17 +35,14 @@ const makeGoodData = (results) => {
       name: item.name,
       place_id: item.place_id,
       icon: item.icon,
-
-      // photoRef: item.photos[0].photo_reference,
       latitude: item.geometry.location.lat,
       longitude: item.geometry.location.lng,
     };
   });
-  //return nearest 7 dests
-  realResults = realResults.slice(0, 8);
+  //return nearest 10 dests
+  realResults = realResults.slice(0, 10);
 
-  // console.log("hospital from api.js");
-  // console.log(realResults);
+  
   return realResults;
 };
 
@@ -51,8 +53,6 @@ export const placeDetails = async (placeId) => {
     console.log(url);
     const response = await fetch(url);
     const json = await response.json();
-    // // console.log(json.photos);
-    // console.log(json.result);
     return makeGoodPlaceData(json.result);
   } catch (e) {
     return { msg: e.message, customError: true };
