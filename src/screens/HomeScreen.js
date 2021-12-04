@@ -46,7 +46,7 @@ export default class HomeScreen extends React.Component {
           <SafeAreaView style={{ backgroundColor: "#FFFFFF", flex: 1 }}>
             <View
               style={{
-                flex: 3.1,
+                flex: 2,
                 flexDirection: "row",
                 padding: 10,
                 justifyContent: "space-around",
@@ -80,7 +80,11 @@ export default class HomeScreen extends React.Component {
                 }
               />
             </View>
-            <View style={{ flex: 3, alignItems: "center" }}>
+            <View style={{ 
+              flex:2,
+             flexDirection: "row",
+                justifyContent: "space-around",
+                alignItems: "flex-start", }}>
               <HomeScreenCard
                 name={"Police Stations"}
                 color={{ backgroundColor: "#FAECFF", borderColor: "#D3B0E0" }}
@@ -94,9 +98,22 @@ export default class HomeScreen extends React.Component {
                   })
                 }
               />
+                <HomeScreenCard
+                name={"Help Line numbers"}
+                color={{ backgroundColor: "#DFE0FC", borderColor: "#CCCEFE" }}
+                imgSrc={require("../../assets/images/sos.png")}
+                onClick={() =>
+                  this.props.navigation.navigate("SOS", {
+                    name: "Help Line numbers",
+                    type: "Help Line",
+                    // latitude: this.state.location.coords.latitude,
+                    // longitude: this.state.location.coords.longitude,
+                  })
+                }
+              />
             </View>
 
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 0.45,justifyContent:"flex-end" }}>
               <Footer />
             </View>
           </SafeAreaView>

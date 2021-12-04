@@ -4,9 +4,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import StartScreen from "./src/screens/StartScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import CommonScreen from "./src/screens/CommonScreen";
+import SOSScreen from "./src/screens/SOSScreen";
 
 const Stack = createStackNavigator();
-
 const App = () => {
   return (
     <NavigationContainer>
@@ -32,6 +32,19 @@ const App = () => {
         <Stack.Screen
           name="Common"
           component={CommonScreen}
+          options={({ route }) => ({
+            title: route.params.name,
+            headerTitleAlign: "center",
+            headerTintColor: "#4A4A4A",
+            headerTitleStyle: {
+              fontSize: 18,
+              fontWeight: "500",
+            },
+          })}
+        />
+              <Stack.Screen
+          name="SOS"
+          component={SOSScreen}
           options={({ route }) => ({
             title: route.params.name,
             headerTitleAlign: "center",

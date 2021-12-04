@@ -9,7 +9,6 @@ import {
   ImageBackground,
 } from "react-native";
 import { Icon } from "react-native-elements";
-
 export default DetailCard = ({
   name,
   details,
@@ -29,14 +28,12 @@ export default DetailCard = ({
     }
     Linking.openURL(phoneNumber);
   };
-
   return (
     <View
       elevation={4}
       style={{
         flex: 1,
         flexDirection: "row",
-        // height: 150,
         marginHorizontal: 2,
         backgroundColor: backgroundColor,
         marginVertical: 5,

@@ -19,7 +19,8 @@ export default HomeScreenCard = ({ name, color, imgSrc, onClick }) => {
       <Image
         source={imgSrc}
         resizeMode={"contain"}
-        style={{ flex: 2.5, alignSelf: "center" }}
+
+        style={{ flex: 2.5, alignSelf: "center",padding:20 }}
       />
       <Text
         style={{
